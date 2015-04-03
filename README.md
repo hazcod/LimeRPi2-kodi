@@ -2,10 +2,11 @@
 Limelight on OpenELEC. (Kodi)
 
 Uses [the limelight project](https://github.com/irtimmer/limelight-embedded).
+Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-and-tricks/76298-how-to-setup-limelight-on-the-raspberry-pi#137002)
 
 Installation:
 --------------
-1. Put [Java for ARM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html) on the pi in /storage/java and test it. Fir
+1. Put [Java for ARM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html) on the pi in /storage/java and test it.
 ```
 mkdir -p /storage/java
 ...extract the java archive and put the contents of the java_1. folder in the /storage/java folder...
