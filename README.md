@@ -37,7 +37,7 @@ if [[ ! $LD_LIBRARY_PATH == *"/storage/limeligt"* ]]; then
   export LD_LIBRARY_PATH=/storage/limelight:$LD_LIBRARY_PATH
 fi
 
-if lsmod | grep "snd_bcm2835" &> /dev/null ; then
+if ! lsmod | grep "snd_bcm2835" &> /dev/null ; then
   echo 'Loaded sound module'
   modprobe snd_bcm2835
 fi
@@ -46,7 +46,7 @@ echo 'Exiting Kodi..'
 systemctl stop kodi
 
 echo 'Starting limelight..'
-/storage/jdk/bin/java -jar /storage/limelight/limelight.jar stream 192.168.0.150
+/storage/java/bin/java -jar /storage/limelight/limelight.jar stream 192.168.0.150
 
 echo 'Finished. Firing Kodi back up..'
 systemctl start kodi
