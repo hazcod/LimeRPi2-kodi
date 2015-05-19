@@ -6,7 +6,7 @@ Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-an
 
 Installation:
 --------------
-1. Put [Java for ARM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html) on the pi in /storage/java and test it.
+1. Put [Java for ARM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html) on the pi in /storage/java and test it. (Future versions will not be java anymore, so no worries.)
 ```
 mkdir -p /storage/java
 ...extract the java archive and put the contents of the java_1. folder in the /storage/java folder...
@@ -69,7 +69,7 @@ function updateMoonlight {
 	if [ ! -f "$FILE" ] || [ "$(version "$latest_version")" -gt "$(version "$current_version")" ]; then
 		echo "Updating moonlight to $latest_version"
 		downloadFile "$releases" libopus.so
-		downloadFile "$releases" moonlight.jar
+		downloadFile "$releases" limelight.jar
 		echo "$latest_version" > "$FILE"
 		return 0
 	else
