@@ -44,7 +44,7 @@ echo 'Exiting Kodi..'
 systemctl stop kodi
 
 echo 'Starting moonlight..'
-/storage/java/bin/java -jar /storage/moonlight/moonlight.jar stream 192.168.0.150
+/storage/java/bin/java -jar /storage/moonlight/limelight.jar stream 192.168.0.150
 
 echo 'Finished. Firing Kodi back up..'
 systemctl start kodi
