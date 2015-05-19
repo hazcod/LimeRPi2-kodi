@@ -13,12 +13,10 @@ mkdir -p /storage/java
 /storage/java/bin/java -version
 ```
 
-2. Put the limelight and libopus files in /storage/limelight.
+2. Create the limelight folder.
 ```
 mkdir -p /storage/limelight
 cd /storage/limelight
-curl -o libopus.so https://github.com/irtimmer/limelight-embedded/releases/download/v1.2.2/libopus.so
-curl -o limelight.jar https://github.com/irtimmer/limelight-embedded/releases/download/v1.2.2/limelight.jar
 ```
 
 3. Pair the pi with the computer. (substitute 192.168.0.150 with the IP of your desktop)
@@ -53,12 +51,45 @@ systemctl start kodi
 EOL
 ```
 
-5. And finally, make the script we just created executable.
+5. Run the following command to create the update script for you.
 ```
-chmod +x /storage/limelight/run.sh
+cat >/storage/limelight/update.sh <<EOL
+function version { echo "$@" | gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
+ 
+function downloadFile {
+	echo "$1" | egrep -o "/irtimmer/moonlight-embedded/releases/download/v([0-9]\.*)+/$2" | wget -q --base=http://github.com/ -i - -O "$2"
+}
+ 
+function updateMoonlight {
+	FILE=version
+	releases=`curl -s -L https://github.com/irtimmer/moonlight-embedded/releases/latest`
+	current_version=`cat $FILE`
+	latest_version=`echo "$releases" | egrep -o "/releases/download/v([0-9]\.*)+/" | egrep -o "v([0-9]\.*)+" | cut -c 2- | head -n 1`
+ 
+	if [ ! -f "$FILE" ] || [ "$(version "$latest_version")" -gt "$(version "$current_version")" ]; then
+		echo "Updating moonlight to $latest_version"
+		downloadFile "$releases" libopus.so
+		downloadFile "$releases" limelight.jar
+		echo "$latest_version" > "$FILE"
+		return 0
+	else
+		echo "No update necessary, at latest version. ($latest_version)"
+		return 1
+	fi
+}
+ 
+updateMoonlight
+EOL
 ```
 
+6. And finally, make the scripts we just created executable.
+```
+chmod +x /storage/limelight/run.sh
+chmod +x /storage/limelight/update.sh
+```
+7. Now run `/storage/limelight/update.sh` to download the latest files.
 
 Finished! Whenever you want to play games using limelight, just run /storage/limelight/run.sh.
 You can even create a link in Kodi to make it as seamless as possible.
+To update limelight, just run /storage/limelight/update.sh
 
