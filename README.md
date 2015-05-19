@@ -1,8 +1,8 @@
 # LimeRPi2-kodi
-Limelight on OpenELEC. (Kodi)
+moonlight on OpenELEC. (Kodi)
 
-Uses [the limelight project](https://github.com/irtimmer/limelight-embedded).
-Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-and-tricks/76298-how-to-setup-limelight-on-the-raspberry-pi#137002)
+Uses [the moonlight project](https://github.com/irtimmer/moonlight-embedded).
+Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-and-tricks/76298-how-to-setup-moonlight-on-the-raspberry-pi#137002)
 
 Installation:
 --------------
@@ -13,26 +13,26 @@ mkdir -p /storage/java
 /storage/java/bin/java -version
 ```
 
-2. Create the limelight folder.
+2. Create the moonlight folder.
 ```
-mkdir -p /storage/limelight
-cd /storage/limelight
+mkdir -p /storage/moonlight
+cd /storage/moonlight
 ```
 
 3. Pair the pi with the computer. (substitute 192.168.0.150 with the IP of your desktop)
 ```
-/storage/java/bin/java -jar /storage/limelight/limelight.jar pair 192.168.0.150
+/storage/java/bin/java -jar /storage/moonlight/moonlight.jar pair 192.168.0.150
 ```
 
-4. Run the following command to create the script to run limelight in /storage/limelight/run.sh
+4. Run the following command to create the script to run moonlight in /storage/moonlight/run.sh
 Again, substitute 192.168.0.150 with the IP of your desktop.
 ```
-cat >/storage/limelight/run.sh <<EOL
+cat >/storage/moonlight/run.sh <<EOL
 #!/bin/sh
 
 if [[ ! $LD_LIBRARY_PATH == *"/storage/limeligt"* ]]; then
   echo 'Changed library path'
-  export LD_LIBRARY_PATH=/storage/limelight:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/storage/moonlight:$LD_LIBRARY_PATH
 fi
 
 if ! lsmod | grep "snd_bcm2835" &> /dev/null ; then
@@ -43,8 +43,8 @@ fi
 echo 'Exiting Kodi..'
 systemctl stop kodi
 
-echo 'Starting limelight..'
-/storage/java/bin/java -jar /storage/limelight/limelight.jar stream 192.168.0.150
+echo 'Starting moonlight..'
+/storage/java/bin/java -jar /storage/moonlight/moonlight.jar stream 192.168.0.150
 
 echo 'Finished. Firing Kodi back up..'
 systemctl start kodi
@@ -53,7 +53,7 @@ EOL
 
 5. Run the following command to create the update script for you.
 ```
-cat >/storage/limelight/update.sh <<EOL
+cat >/storage/moonlight/update.sh <<EOL
 function version { echo "$@" | gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
  
 function downloadFile {
@@ -69,7 +69,7 @@ function updateMoonlight {
 	if [ ! -f "$FILE" ] || [ "$(version "$latest_version")" -gt "$(version "$current_version")" ]; then
 		echo "Updating moonlight to $latest_version"
 		downloadFile "$releases" libopus.so
-		downloadFile "$releases" limelight.jar
+		downloadFile "$releases" moonlight.jar
 		echo "$latest_version" > "$FILE"
 		return 0
 	else
@@ -84,12 +84,12 @@ EOL
 
 6. And finally, make the scripts we just created executable.
 ```
-chmod +x /storage/limelight/run.sh
-chmod +x /storage/limelight/update.sh
+chmod +x /storage/moonlight/run.sh
+chmod +x /storage/moonlight/update.sh
 ```
-7. Now run `/storage/limelight/update.sh` to download the latest files.
+7. Now run `/storage/moonlight/update.sh` to download the latest files.
 
-Finished! Whenever you want to play games using limelight, just run /storage/limelight/run.sh.
+Finished! Whenever you want to play games using moonlight, just run /storage/moonlight/run.sh.
 You can even create a link in Kodi to make it as seamless as possible.
-To update limelight, just run /storage/limelight/update.sh
+To update moonlight, just run /storage/moonlight/update.sh
 
