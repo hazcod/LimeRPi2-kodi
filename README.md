@@ -6,7 +6,9 @@ Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-an
 
 Installation:
 --------------
-1. This version of limelight still needs Java, so let's put it on the pi in /storage/java and test it. (Future versions will not be java anymore, so no worries.)
+1. Connect to your Pi over SSH.
+
+2. This version of limelight still needs Java, so let's put it on the pi in /storage/java and test it. (Future versions will not be java anymore, so no worries.)
 ```
 mkdir -p /storage/java
 curl -L -O -s https://github.com/HazCod/LimeRPi2-kodi/blob/master/jdk-8u33-linux-arm-vfp-hflt.tar.gz?raw=true
@@ -16,18 +18,18 @@ mv jdk1.8.0_33/* /storage/java
 /storage/java/bin/java -version
 ```
 
-2. Create the moonlight folder.
+3. Create the moonlight folder.
 ```
 mkdir -p /storage/moonlight
 cd /storage/moonlight
 ```
 
-3. Pair the pi with the computer. (substitute 192.168.0.150 with the IP of your desktop)
+4. Pair the pi with the computer. (substitute 192.168.0.150 with the IP of your desktop)
 ```
 /storage/java/bin/java -jar /storage/moonlight/moonlight.jar pair 192.168.0.150
 ```
 
-4. Run the following command to create the script to run moonlight in /storage/moonlight/run.sh
+5. Run the following command to create the script to run moonlight in /storage/moonlight/run.sh
 Again, substitute 192.168.0.150 with the IP of your desktop.
 ```
 cat >/storage/moonlight/run.sh <<EOL
@@ -54,7 +56,7 @@ systemctl start kodi
 EOL
 ```
 
-5. Run the following command to create the update script for you.
+6. Run the following command to create the update script for you.
 ```
 cat >/storage/moonlight/update.sh <<EOL
 #!/bin/bash
@@ -90,12 +92,12 @@ updateMoonlight
 EOL
 ```
 
-6. And finally, make the scripts we just created executable.
+7. And finally, make the scripts we just created executable.
 ```
 chmod +x /storage/moonlight/run.sh
 chmod +x /storage/moonlight/update.sh
 ```
-7. Now run `/storage/moonlight/update.sh` to download the latest files.
+8. Now run `/storage/moonlight/update.sh` to download the latest files.
 
 Finished! Whenever you want to play games using moonlight, just run /storage/moonlight/run.sh.
 You can even create a link in Kodi to make it as seamless as possible. (Prepend it with systemd-run)
