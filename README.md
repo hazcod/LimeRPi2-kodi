@@ -6,10 +6,13 @@ Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-an
 
 Installation:
 --------------
-1. Put [Java for ARM](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-arm-downloads-2187472.html) on the pi in /storage/java and test it. (Future versions will not be java anymore, so no worries.)
+1. This version of limelight still needs Java, so let's put it on the pi in /storage/java and test it. (Future versions will not be java anymore, so no worries.)
 ```
 mkdir -p /storage/java
-...extract the java archive and put the contents of the java_1. folder in the /storage/java folder...
+curl -L -O -s https://github.com/HazCod/LimeRPi2-kodi/blob/master/jdk-8u33-linux-arm-vfp-hflt.tar.gz?raw=true
+tar xvf jdk-8u33-linux-arm-vfp-hflt.tar.gz
+rm tar xvf jdk-8u33-linux-arm-vfp-hflt.tar.gz
+mv jdk1.8.0_33/* /storage/java
 /storage/java/bin/java -version
 ```
 
