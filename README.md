@@ -96,7 +96,7 @@ chmod +x /storage/moonlight/update.sh
 
 Finished! Whenever you want to play games using moonlight, just run /storage/moonlight/run.sh.
 You can even create a link in Kodi to make it as seamless as possible. (Prepend it with systemd-run)
-So for example: `system.exec(systemd-run /storage/moonlight/run.sh)`
+So for example: `system.exec("systemd-run /storage/moonlight/run.sh")`
 
 
 To update moonlight, just run /storage/moonlight/update.sh
