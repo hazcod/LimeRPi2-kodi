@@ -35,7 +35,7 @@ Again, substitute 192.168.0.150 with the IP of your desktop.
 cat >/storage/moonlight/run.sh <<EOL
 #!/bin/sh
 
-if [[ ! $LD_LIBRARY_PATH == *"/storage/limeligt"* ]]; then
+if [[ ! $LD_LIBRARY_PATH == *"/storage/limelight"* ]]; then
   echo 'Changed library path'
   export LD_LIBRARY_PATH=/storage/moonlight:$LD_LIBRARY_PATH
 fi
