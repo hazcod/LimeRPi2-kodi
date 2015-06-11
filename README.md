@@ -61,30 +61,62 @@ EOL
 cat >/storage/moonlight/update.sh <<EOL
 #!/bin/bash
 
-function version { echo "$@" | gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
 
-function downloadFile {
+vercomp () {
+    if [[ "$1" == "$2" ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
+
+downloadFile() {
     # $1 : first argument must be version
     # $2 : second argument must be file to download
     curl -L -O -s "https://github.com/irtimmer/moonlight-embedded/releases/download/v$1/$2"
 }
 
-function updateMoonlight {
-	FILE=version
-	releases=`curl --silent -L https://github.com/irtimmer/moonlight-embedded/releases/latest`
-	current_version=`if [ -f "$FILE" ]; then cat $FILE; fi`
-	latest_version=`echo "$releases" | egrep -o "/releases/download/v([0-9]\.*)+/" | egrep -o "v([0-9]\.*)+" | cut -c 2- | head -n 1`
+updateMoonlight() {
+    FILE=version
+    releases=$(curl --silent -L https://github.com/irtimmer/moonlight-embedded/releases/latest)
+    current_version=$(if [ -f "$FILE" ]; then cat $FILE; fi)
+    latest_version=$(echo "$releases" | egrep -o "/releases/download/v([0-9]\.*)+/" | egrep -o "v([0-9]\.*)+" | cut -c 2- | head -n 1)
 
-	if [ ! -f "$FILE" ] || [ "$(version "$latest_version")" -gt "$(version "$current_version")" ]; then
-		echo "Updating moonlight to $latest_version"
-		downloadFile "$latest_version" libopus.so
-		downloadFile "$latest_version" limelight.jar
-		echo "$latest_version" > "$FILE"
-		return 0
-	else
-		echo "No update necessary, at latest version. ($latest_version)"
-		return 1
-	fi
+    v_cmp=$(vercomp "$latest_version" "$current_version")
+
+    if [ ! -f "$FILE" ] || [ "$v_cmp" == "1" ]; then
+        echo "Updating moonlight to $latest_version"
+        downloadFile "$latest_version" libopus.so
+        downloadFile "$latest_version" limelight.jar
+        echo "$latest_version" > "$FILE"
+        return 0
+    else
+        echo "No update necessary, at latest version. ($latest_version)"
+        return 1
+    fi
 }
 
 updateMoonlight
