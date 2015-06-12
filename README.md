@@ -42,24 +42,29 @@ STREAMSETTINGS='-720 -60fps'
 
 #### /SETTINGS
 
-if [[ ! $LD_LIBRARY_PATH == *"/storage/moonlight"* ]]; then
-  echo 'Changed library path'
-  export LD_LIBRARY_PATH=/storage/moonlight:$LD_LIBRARY_PATH
+if [ ! ping -W 1 -c 1 $IP > /dev/null 2>&1 && echo 'Online' ]; then
+    echo "Could not contact $IP, turn on host PC and retry."
+    kodi-send --action=notification"(PC Offline, Turn on the host PC and retry.)"
+else
+  if [[ ! $LD_LIBRARY_PATH == *"/storage/moonlight"* ]]; then
+    echo 'Changed library path'
+    export LD_LIBRARY_PATH=/storage/moonlight:$LD_LIBRARY_PATH
+  fi
+  
+  if ! lsmod | grep "snd_bcm2835" &> /dev/null ; then
+    echo 'Loaded sound module'
+    modprobe snd_bcm2835
+  fi
+  
+  echo 'Exiting Kodi..'
+  systemctl stop kodi
+  
+  echo 'Starting moonlight..'
+  /storage/java/bin/java -jar /storage/moonlight/limelight.jar stream "$IP"
+  
+  echo 'Finished. Firing Kodi back up..'
+  systemctl start kodi
 fi
-
-if ! lsmod | grep "snd_bcm2835" &> /dev/null ; then
-  echo 'Loaded sound module'
-  modprobe snd_bcm2835
-fi
-
-echo 'Exiting Kodi..'
-systemctl stop kodi
-
-echo 'Starting moonlight..'
-/storage/java/bin/java -jar /storage/moonlight/limelight.jar stream 192.168.0.150
-
-echo 'Finished. Firing Kodi back up..'
-systemctl start kodi
 EOL
 ```
 
