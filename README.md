@@ -32,7 +32,7 @@ cd /storage/moonlight
 5. Run the following command to create the script to run moonlight in /storage/moonlight/moonlight.sh
 Again, substitute 192.168.0.150 with the IP address of your desktop.
 ```
-cat >/storage/moonlight/run.sh <<EOL
+cat >/storage/moonlight/moonlight.sh <<EOL
 #!/bin/sh
 
 #### SETTINGS
@@ -73,7 +73,7 @@ EOL
 ```
 cat >/storage/moonlight/run.sh <<EOL
 #!/bin/sh
-systemd-run /storage/moonlight/startup.sh
+systemd-run /storage/moonlight/moonlight.sh
 EOL
 ```
 
@@ -151,7 +151,7 @@ chmod +x /storage/moonlight/run.sh
 chmod +x /storage/moonlight/moonlight.sh
 chmod +x /storage/moonlight/update.sh
 ```
-9. Now run `/storage/moonlight/run.sh` to download the latest files.
+9. Now run `/storage/moonlight/update.sh` to download the latest files.
 
 Finished! Whenever you want to play games using moonlight, just run /storage/moonlight/run.sh.
 You can run this using an addon such as Advanced Launcher.
