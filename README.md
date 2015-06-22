@@ -1,6 +1,8 @@
 # LimeRPi2-kodi
 moonlight on OpenELEC. (Kodi)
 
+CURRENTLY DOES NOT WORK / IS OUTDATED. NEEDS WORK TO SUPPORT THE NEW C VERSION OF MOONLIGHT.
+
 Uses [the moonlight project](https://github.com/irtimmer/moonlight-embedded).
 Also posted on [the OpenELEC forums.](http://openelec.tv/forum/12-guides-tips-and-tricks/76298-how-to-setup-moonlight-on-the-raspberry-pi#137002)
 
